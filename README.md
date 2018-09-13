@@ -37,7 +37,7 @@ You must run NBN Rebooter on a machine that is on the same network as your modem
 
 ## Usage:
 
-I run this application on a Raspberry Pie that runs 24/7 to ensure my modem is rebooted daily at 6am. I also log the sync statistics so I can monitor the line issue. To run in this configuration the command line would be:
+I run this application on a Raspberry Pi that runs 24/7 to ensure my modem is rebooted daily at 6am. I also log the sync statistics so that I can monitor the line issue. To run in this configuration the command line would be:
 
 ```
 -ip 192.168.0.1 -reboot 06:00 -log Rebooter.Log
