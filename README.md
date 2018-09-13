@@ -4,7 +4,8 @@ Schedule daily reboots of your NBN modem as well as logging sync rate statistics
 ## Description:
 NBN Rebooter allows for logging of modem sync rates as well as scheduled reboot of the modem.
 
-If you have the NBN FTTN (Fibre to the Node) solution and a poor quality connection, NBN Co may apply DLM () to stabilise your line.
+If you have the NBN FTTN (Fibre to the Node) solution and a poor quality connection, NBN Co may apply dynamic line provisioning (DLM) to stabilise your line.
+
 This also means you sync rates (and therefore download/upload speed) will drop over time. Rebooting of your modem (should) reset your sync rate to its original maximum speed. The statistics provided by NBN Rebooter can also help you determine if your issue is getting worse over time.
 
 ## Modem Compatibility:
