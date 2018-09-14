@@ -28,7 +28,7 @@ If you do not want to run the pre-complied EXE file, or would like to make your 
 
 1. Install Visual Studio. https://visualstudio.microsoft.com/vs/community/
 2. Download the source code.
-3. Open the NBNRebooter.sln file.
+3. Open the NBNRebooter.csproj file.
 4. Build in Release mode.
 
 Ready to go!
