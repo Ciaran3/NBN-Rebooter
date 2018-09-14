@@ -106,4 +106,4 @@ Perform a reboot as soon as NBN Rebooter starts (optional).
 Username to login to your modem page (optional).
 
 * ```-password```
-Optional. Password to login to your modem page (optional).
+Password to login to your modem page (optional).
