@@ -22,9 +22,9 @@ This also means you sync rates (and therefore download/upload speed) will drop o
 Please let me know if it works with other modems. If it does not, you can log an issue to request support.
 
 ## Download:
-######  Pre-Compiled EXE:
- [Coming Soon]
-
+######  Compiled EXE:
+* [Download the compiled NBN Rebooter EXE](NBN-Rebooter/Compiled/NBNRebooter.exe )
+ 
 ######  Manually compile (Optional):
 If you do not want to run the pre-complied EXE file, or would like to make your own modifications, you can grab the source code in compile it yourself.
 
