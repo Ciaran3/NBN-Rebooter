@@ -63,9 +63,13 @@ cd /home/pi/scripts/NBNRebooter
 mono NBNRebooter.exe -ip 192.168.0.1 -reboot 06:30 -log Rebooter.Log
 ```
 
+![screenshot](https://raw.githubusercontent.com/Ciaran3/NBN-Rebooter/master/screenshot.PNG)
+
 ## Usage:
 
-I run this application on a Raspberry Pi that runs 24/7 to ensure my modem is rebooted daily at 6:30 am. I also save the sync statistics to a log file so that I can monitor the line issue. To run in this configuration the command line would be:
+I run this application on a Raspberry Pi that runs 24/7 to ensure my modem is rebooted daily at 6:30 am. I also save the sync statistics to a log file so that I can monitor the line issue. 
+
+Perform reboot at 6.30 am and log statistics to "Rebooter.Log" in the same directory as the EXE.
 
 ```
 -ip 192.168.0.1 -reboot 06:00 -log Rebooter.Log
