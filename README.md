@@ -23,7 +23,7 @@ Please let me know if it works with other modems. If it does not, you can log an
 
 ## Download:
 ######  Compiled EXE:
-* [Download the compiled NBN Rebooter EXE](NBN-Rebooter/Compiled/NBNRebooter.exe )
+* [Download the compiled NBN Rebooter EXE](https://github.com/Ciaran3/NBN-Rebooter/blob/master/Compiled/NBNRebooter.exe)
  
 ######  Manually compile (Optional):
 If you do not want to run the pre-complied EXE file, or would like to make your own modifications, you can grab the source code in compile it yourself.
