@@ -1,6 +1,8 @@
 # NBN Rebooter
 Schedule daily reboots of your NBN modem as well as logging sync rate statistics.
 
+![screenshot](https://raw.githubusercontent.com/Ciaran3/NBN-Rebooter/master/screenshot.PNG)
+
 ## Description:
 NBN Rebooter is a console application that allows for logging of your modem's sync rates as well a daily reboot of the modem.
 
@@ -62,8 +64,6 @@ Example:
 cd /home/pi/scripts/NBNRebooter 
 mono NBNRebooter.exe -ip 192.168.0.1 -reboot 06:30 -log Rebooter.Log
 ```
-
-![screenshot](https://raw.githubusercontent.com/Ciaran3/NBN-Rebooter/master/screenshot.PNG)
 
 ## Usage:
 
