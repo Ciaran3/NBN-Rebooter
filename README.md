@@ -1,10 +1,10 @@
 # NBN Rebooter
-Schedule daily reboots of your NBN modem as well as logging sync rate statistics.
+Schedule daily or maximum uptime reboots of your NBN modem as well as logging sync rate statistics.
 
 ![screenshot](https://raw.githubusercontent.com/Ciaran3/NBN-Rebooter/master/screenshot.PNG)
 
 ## Description:
-NBN Rebooter is a console application that allows for logging of your modem's sync rates as well a daily reboot of the modem.
+NBN Rebooter is a console application that allows for logging of your modem's sync rates as well a scheduling reboots.
 
 If you have the NBN FTTN (Fibre to the Node) solution and a poor quality connection, [NBN Co](https://www.nbnco.com.au/) may apply dynamic line management (DLM) to stabilise your line.
 
@@ -23,7 +23,7 @@ Please let me know if it works with other modems. If it does not, you can log an
 
 ## Download:
 ######  Compiled EXE:
-* [Download the compiled NBN Rebooter EXE](https://github.com/Ciaran3/NBN-Rebooter/blob/master/Compiled/NBNRebooter.exe)
+* [Download the latest version of NBN Rebooter EXE](https://github.com/Ciaran3/NBN-Rebooter/blob/master/Compiled)
  
 ######  Manually compile (Optional):
 If you do not want to run the pre-complied EXE file, or would like to make your own modifications, you can grab the source code in compile it yourself.
@@ -80,6 +80,11 @@ Log statistics, but do not reboot:
 -ip 192.168.0.1 -log Rebooter.Log
 ```
 
+Reboot at 6 am, only if the modem has reached 48 hours of uptime:
+```
+-ip 192.168.0.1 -reboot 06:00 -maxuptime 48
+```
+
 Reboot daily, but don't save statistics:
 ```
 -ip 192.168.0.1 -reboot 06:00
@@ -102,6 +107,11 @@ Enter the time you would like to schedule the reboot at (optional).
 Must be in 24 hour format. For Example:
 '06:30' - 6.30 am.
 '23:00' - 11 pm.
+
+* ```-maxuptime``` 
+Enter the maximum uptime of the modem (in hours), before it should be rebooted (optional).
+Can be used in combination with ```-reboot``` to specify maximum uptime and the next time to reboot at.
+For example, to reboot every 2 days: -maxuptime 48
 
 * ```-rebootnow```
 Perform a reboot as soon as NBN Rebooter starts (optional). 
