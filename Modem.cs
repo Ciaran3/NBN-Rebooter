@@ -1,100 +1,78 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 
 namespace NBNRebooter
 {
     public abstract class Modem
     {
-        public abstract string ModemName { get; }
-        public abstract string StatisticsURL { get; }
-        public abstract string RebootURL { get; }
+        public abstract string GetModemName();
+
+        public abstract string GetStatisticsUrl();
+
+        public abstract string GetRebootUrl();
+
         public string Uprate { get; set; }
         public string Downrate { get; set; }
         public string UpTime { get; set; }
+        public int UpTimeHours { get; set; }
 
+        public abstract Boolean GetSyncRates(AppProperties aProperties);
 
-        public abstract Boolean GetSyncRates(AppProperties AProperties);
-
-        public void ResetStats()
-        {
-            Uprate = "";
-            Downrate = "";
-            UpTime = "";
-        }
-
-        public void LogMessage(AppProperties AProperties, string AMessage)
-        {
-            string sOutput = string.Format("{0}, {1}", DateTime.Now.ToString(), AMessage);
-            Console.WriteLine(sOutput);
-
-            if (!String.IsNullOrEmpty(AProperties.LogPath))
-            {
-                try
-                {
-                    File.AppendAllText(AProperties.LogPath, sOutput + Environment.NewLine);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(string.Format("An error occurred writing to the log: {0}. Error: {1}", AProperties.LogPath, ex.Message));
-                }
-            }
-        }
-
-        public void LogSyncRates(AppProperties AProperties)
+        public void LogSyncRates(AppProperties aProperties)
         {
             // Only log if stats have changed
-            if (GetSyncRates(AProperties) & (!String.Equals(Downrate + Uprate, AProperties.LastStats, StringComparison.OrdinalIgnoreCase)))
+            if (GetSyncRates(aProperties) & (!String.Equals(Downrate + Uprate, aProperties.LastStats, StringComparison.OrdinalIgnoreCase)))
             {
-                // Remeber these stats
-                AProperties.LastStats = Downrate + Uprate;
-
-                LogMessage(AProperties, string.Format("Downstream (Kbps): {0}, Upstream (Kbps): {1}, Uptime: {2}", Downrate, Uprate, UpTime));
+                // Remember these stats
+                aProperties.LastStats = Downrate + Uprate;
+                aProperties.LogMessage(aProperties,
+                    $"Downstream (Kbps): {Downrate}, Upstream (Kbps): {Uprate}, Uptime: {UpTime}");
             }
         }
 
-        public void PerformReboot(AppProperties AProperties)
+        public void PerformReboot(AppProperties aProperties)
         {
-            GetSyncRates(AProperties);
+            GetSyncRates(aProperties);
 
             // Log the current stats just before the reboot
-            LogMessage(AProperties, string.Format("Sending Reboot Command. Current Stats: Downstream (Kbps): {0}, Upstream (Kbps): {1}, Uptime: {2}", Downrate, Uprate, UpTime));
+            aProperties.LogMessage(aProperties,
+                $"Sending Reboot Command. Current Stats: Downstream (Kbps): {Downrate}, Upstream (Kbps): {Uprate}, Uptime: {UpTime}");
 
-            string sRebootHTML = GetPageHTML(AProperties, string.Format(RebootURL, AProperties.ModemIP));
+            string sRebootHtml = GetPageHtml(aProperties, string.Format(GetRebootUrl(), aProperties.ModemIP));
 
-            if (!String.IsNullOrEmpty(sRebootHTML))
+            if (!string.IsNullOrEmpty(sRebootHtml))
             {
-                AProperties.LastReboot = DateTime.Now;
-                AProperties.HasReboot = true;
-                AProperties.RebootOnStart = false;
+                aProperties.LastReboot = DateTime.Now;
+                aProperties.HasReboot = true;
+                aProperties.RebootOnStart = false;
             }
         }
 
-        public string GetPageHTML(AppProperties AProperties, string AURL)
+        public string GetPageHtml(AppProperties aProperties, string aUrl)
         {
-            using (System.Net.WebClient oClient = new System.Net.WebClient())
+            using (WebClient oClient = new WebClient())
             {
-                if (AProperties.UseAuth)
+                if (aProperties.UseAuth)
                 {
                     oClient.UseDefaultCredentials = true;
-                    oClient.Credentials = new NetworkCredential(AProperties.Username, AProperties.Password);
+                    oClient.Credentials = new NetworkCredential(aProperties.Username, aProperties.Password);
                 }
 
                 try
                 {
-                    return oClient.DownloadString(AURL);
+                    return oClient.DownloadString(aUrl);
                 }
                 catch (WebException ex)
                 {
-                    HandleWebException(ex, AURL);
+                    HandleWebException(ex, aUrl);
                     return "";
                 }
             }
         }
 
-        public void HandleWebException(WebException AException, string AURL)
+        public void HandleWebException(WebException aException, string aUrl)
         {
-            Console.WriteLine(string.Format("An error occurred loading the URL: {0}. Error: {1}", AURL, AException.Message));
+            Console.WriteLine($"An error occurred loading the URL: {aUrl}. Error: {aException.Message}");
         }
     }
 }

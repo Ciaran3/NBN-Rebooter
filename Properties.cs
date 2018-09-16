@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
+using static System.Console;
 
 namespace NBNRebooter
 {
@@ -11,6 +14,7 @@ namespace NBNRebooter
 
         public string LastStats { get; set; }
         public TimeSpan RebootTime { get; set; }
+        public int MaxUpTime { get; set; }
         public string LogPath { get; set; }
         public DateTime LastReboot { get; set; }
         public DateTime LastStatCheck { get; set; }
@@ -18,65 +22,103 @@ namespace NBNRebooter
         public Boolean HasReboot { get; set; }
         public Boolean RebootOnStart { get; set; }
         public Boolean ScheduleReboot { get; set; }
+        public Boolean MaxUpTimeReboot { get; set; }
         public Modem CurrentModem { get; set; }
 
-        public void ReadParameters(SimpleCommandLineParser AParser, AppProperties AProperties)
+        public void ReadParameters(SimpleCommandLineParser aParser, AppProperties aProperties)
         {
-            AProperties.RebootOnStart = AParser.Arguments.ContainsKey("rebootnow");
-            AProperties.ScheduleReboot = AParser.Arguments.ContainsKey("reboot");
-            AProperties.InitialStatCheck = true;
-            AProperties.RebootTime = TimeSpan.Zero;
+            MaxUpTime = 0;
 
-            AProperties.UseAuth = AParser.Arguments.ContainsKey("username") & AParser.Arguments.ContainsKey("password");
+            aProperties.RebootOnStart = aParser.Arguments.ContainsKey("rebootnow");
+            aProperties.ScheduleReboot = aParser.Arguments.ContainsKey("reboot");
+            aProperties.MaxUpTimeReboot = aParser.Arguments.ContainsKey("maxuptime");
+            aProperties.InitialStatCheck = true;
+            aProperties.RebootTime = TimeSpan.Zero;
 
-            if (AProperties.UseAuth)
+            aProperties.UseAuth = aParser.Arguments.ContainsKey("username") & aParser.Arguments.ContainsKey("password");
+
+            if (aProperties.UseAuth)
             {
-                AProperties.Username = AParser.Arguments["username"][0];
-                AProperties.Password = AParser.Arguments["password"][0];
+                aProperties.Username = aParser.Arguments["username"][0];
+                aProperties.Password = aParser.Arguments["password"][0];
             }
 
-            AProperties.LogPath = (AParser.Arguments.ContainsKey("log")) ? AParser.Arguments["log"][0] : "";
-            if (String.IsNullOrEmpty(AProperties.LogPath))
+            if (aProperties.MaxUpTimeReboot)
             {
-                Console.WriteLine("No log path specified. Console output only enabled.");
-            }
-
-            AProperties.ModemIP = (AParser.Arguments.ContainsKey("ip")) ? AParser.Arguments["ip"][0] : "";
-            if (String.IsNullOrEmpty(AProperties.ModemIP))
-            {
-                Console.WriteLine("No modem IP provide, please see the help for parameter usage.");
-                AProperties.ModemIP = "";
-                return;
-            }
-
-            if (AProperties.ScheduleReboot)
-            {
-                TimeSpan tsScheduleTime;
-                if (TimeSpan.TryParse(AParser.Arguments["reboot"][0], out tsScheduleTime))
+                if (int.TryParse(aParser.Arguments["maxuptime"][0], out int iMaxUpTime))
                 {
-                    AProperties.RebootTime = tsScheduleTime;
+                    MaxUpTime = iMaxUpTime;
                 }
                 else
                 {
-                    AProperties.ScheduleReboot = false;
-                    Console.WriteLine(string.Format("Unable to convert {0} to reboot hour.", AParser.Arguments["r"][0]));
+                    WriteLine($"Unable to convert {aParser.Arguments["maxuptime"][0]} to max up time.");
                 }
             }
-            else
+
+            aProperties.LogPath = (aParser.Arguments.ContainsKey("log")) ? aParser.Arguments["log"][0] : "";
+            if (String.IsNullOrEmpty(aProperties.LogPath))
             {
-                Console.WriteLine("No reboot hour set. Running in stat logging only mode.");
+                WriteLine("No log path specified. Console output only enabled.");
             }
 
-            if (AProperties.RebootOnStart)
+            aProperties.ModemIP = (aParser.Arguments.ContainsKey("ip")) ? aParser.Arguments["ip"][0] : "";
+            if (String.IsNullOrEmpty(aProperties.ModemIP))
             {
-                Console.WriteLine("Reboot parameter found. Reboot will occur immediately");
+                WriteLine("No modem IP provide, please see the help for parameter usage.");
+                aProperties.ModemIP = "";
+                return;
+            }
+
+            if (aProperties.ScheduleReboot)
+            {
+                if (TimeSpan.TryParse(aParser.Arguments["reboot"][0], out var tsScheduleTime))
+                {
+                    aProperties.RebootTime = tsScheduleTime;
+                }
+                else
+                {
+                    aProperties.ScheduleReboot = false;
+                    WriteLine($"Unable to convert {aParser.Arguments["reboot"][0]} to reboot hour.");
+                }
+            }
+
+            if (aProperties.RebootOnStart)
+            {
+                WriteLine("Reboot will occur immediately...");
             }
             else
-            if (AProperties.ScheduleReboot & (AProperties.RebootTime != TimeSpan.Zero))
+            if (aProperties.ScheduleReboot & (aProperties.RebootTime != TimeSpan.Zero))
             {
-                Console.WriteLine(string.Format("Next reboot will occur at {0}", AProperties.RebootTime.ToString()));
+                WriteLine($"Next reboot will occur at {aProperties.RebootTime.ToString()}");
+                if (MaxUpTime > 0)
+                {
+                    WriteLine($"AND when the modem uptime has reached {MaxUpTime.ToString()} hours.");
+                }      
+            }else if (MaxUpTime > 0)
+            {
+                WriteLine($"Next reboot will occur when the modem uptime has reached {MaxUpTime.ToString()} hours.");
             }
         }
 
+        public void LogMessage(AppProperties aProperties, string aMessage)
+        {
+            string sOutput = $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)}, {aMessage}";
+            WriteLine(sOutput);
+
+            if (!string.IsNullOrEmpty(aProperties.LogPath))
+            {
+                try
+                {
+                    File.AppendAllText(aProperties.LogPath, sOutput + Environment.NewLine);
+                }
+                catch (Exception ex)
+                {
+                    WriteLine($"An error occurred writing to the log: {aProperties.LogPath}. Error: {ex.Message}");
+                }
+            }
+        }
     }
+
+
+
 }
