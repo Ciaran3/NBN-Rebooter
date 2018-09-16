@@ -72,7 +72,7 @@ I run this application on a Raspberry Pi that runs 24/7 to ensure my modem is re
 Perform reboot at 6.30 am and log statistics to "Rebooter.Log" in the same directory as the EXE.
 
 ```
--ip 192.168.0.1 -reboot 06:00 -log Rebooter.Log
+-ip 192.168.0.1 -reboot 06:30 -log Rebooter.Log
 ```
 
 Log statistics, but do not reboot:
@@ -80,14 +80,14 @@ Log statistics, but do not reboot:
 -ip 192.168.0.1 -log Rebooter.Log
 ```
 
-Reboot at 6 am, only if the modem has reached 48 hours of uptime:
+Reboot at 6:30 am, only if the modem has reached 48 hours of uptime:
 ```
--ip 192.168.0.1 -reboot 06:00 -maxuptime 48
+-ip 192.168.0.1 -reboot 06:30 -maxuptime 48
 ```
 
 Reboot daily, but don't save statistics:
 ```
--ip 192.168.0.1 -reboot 06:00
+-ip 192.168.0.1 -reboot 06:30
 ```
 
 Reboot immediately:
