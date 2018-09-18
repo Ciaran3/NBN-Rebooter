@@ -56,6 +56,7 @@ namespace NBNRebooter
             if ((MinutesSinceLastReboot(aProperties) > 5) & (aProperties.InitialStatCheck | oStatDiff.Minutes > 30))
             {
                 aProperties.CurrentModem.LogSyncRates(aProperties);
+                aProperties.InitialStatCheck = false;
             }
 
             if (aProperties.ScheduleReboot | aProperties.MaxUpTimeReboot)
