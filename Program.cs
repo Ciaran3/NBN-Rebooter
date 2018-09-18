@@ -53,7 +53,7 @@ namespace NBNRebooter
             TimeSpan oStatDiff = DateTime.Now.Subtract(aProperties.LastStatCheck);
 
             // Only check for stats change every 30 minutes.
-            if ((MinutesSinceLastReboot(aProperties) > 5) & (aProperties.InitialStatCheck | oStatDiff.Minutes > 30))
+            if ((MinutesSinceLastReboot(aProperties) > 5) & (aProperties.InitialStatCheck | oStatDiff.Minutes > aProperties.UpdateInterval))
             {
                 aProperties.CurrentModem.LogSyncRates(aProperties);
                 aProperties.InitialStatCheck = false;

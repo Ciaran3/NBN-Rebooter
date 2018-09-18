@@ -15,6 +15,7 @@ namespace NBNRebooter
         public string LastStats { get; set; }
         public TimeSpan RebootTime { get; set; }
         public int MaxUpTime { get; set; }
+        public int UpdateInterval { get; set; }
         public string LogPath { get; set; }
         public DateTime LastReboot { get; set; }
         public DateTime LastStatCheck { get; set; }
@@ -34,8 +35,21 @@ namespace NBNRebooter
             aProperties.MaxUpTimeReboot = aParser.Arguments.ContainsKey("maxuptime");
             aProperties.InitialStatCheck = true;
             aProperties.RebootTime = TimeSpan.Zero;
-
+            
             aProperties.UseAuth = aParser.Arguments.ContainsKey("username") & aParser.Arguments.ContainsKey("password");
+
+            int iUpdateInterval;
+            if (aParser.Arguments.ContainsKey("interval"))
+            {
+                int.TryParse(aParser.Arguments["interval"][0], out iUpdateInterval);
+            }
+            else
+            {
+                // Default interval to refresh statistics
+                iUpdateInterval = 30;
+            }
+
+            aProperties.UpdateInterval = iUpdateInterval;
 
             if (aProperties.UseAuth)
             {
