@@ -97,6 +97,9 @@ namespace NBNRebooter
             }else if (MaxUpTime > 0)
             {
                 WriteLine($"Next reboot will occur when the modem uptime has reached {MaxUpTime.ToString()} hours.");
+            }else if ((!aProperties.ScheduleReboot) & !(MaxUpTime > 0))
+            {
+                WriteLine("No reboot schedule set. Only logging sync rate statistics.");
             }
         }
 
