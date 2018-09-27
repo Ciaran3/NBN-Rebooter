@@ -36,7 +36,7 @@ namespace NBNRebooter
             aProperties.InitialStatCheck = true;
             aProperties.RebootTime = TimeSpan.Zero;
             
-            aProperties.UseAuth = aParser.Arguments.ContainsKey("username") & aParser.Arguments.ContainsKey("password");
+            aProperties.UseAuth = aParser.Arguments.ContainsKey("username") && aParser.Arguments.ContainsKey("password");
 
             int iUpdateInterval;
             if (aParser.Arguments.ContainsKey("interval"))
@@ -101,7 +101,7 @@ namespace NBNRebooter
                 WriteLine("Reboot will occur immediately...");
             }
             else
-            if (aProperties.ScheduleReboot & (aProperties.RebootTime != TimeSpan.Zero))
+            if (aProperties.ScheduleReboot && (aProperties.RebootTime != TimeSpan.Zero))
             {
                 WriteLine($"Next reboot will occur at {aProperties.RebootTime.ToString()}");
                 if (MaxUpTime > 0)
@@ -111,7 +111,7 @@ namespace NBNRebooter
             }else if (MaxUpTime > 0)
             {
                 WriteLine($"Next reboot will occur when the modem uptime has reached {MaxUpTime.ToString()} hours.");
-            }else if ((!aProperties.ScheduleReboot) & !(MaxUpTime > 0))
+            }else if ((!aProperties.ScheduleReboot) && !(MaxUpTime > 0))
             {
                 WriteLine("No reboot schedule set. Only logging sync rate statistics.");
             }

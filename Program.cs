@@ -51,9 +51,12 @@ namespace NBNRebooter
         private static void DoTimedEvents(AppProperties aProperties)
         {
             TimeSpan oStatDiff = DateTime.Now.Subtract(aProperties.LastStatCheck);
+            // Minutes since the last reboot command was sent.
+            int iMinutesSinceLastReboot = MinutesSinceLastReboot(aProperties);
+            // Allow some time for the reboot to occur, then check the statistics.
+            Boolean bJustRebooted = (iMinutesSinceLastReboot > 4) && (iMinutesSinceLastReboot < 10);
 
-            // Only check for stats change every 30 minutes.
-            if ((MinutesSinceLastReboot(aProperties) > 5) & (aProperties.InitialStatCheck | oStatDiff.Minutes > aProperties.UpdateInterval))
+            if ((bJustRebooted) | (aProperties.InitialStatCheck | oStatDiff.Minutes > aProperties.UpdateInterval))
             {
                 aProperties.CurrentModem.LogSyncRates(aProperties);
                 aProperties.InitialStatCheck = false;
@@ -88,14 +91,14 @@ namespace NBNRebooter
             TimeSpan dEndTime = aProperties.RebootTime.Add(TimeSpan.FromMinutes(5));
 
             // Ensure we are within the reboot time and have not just already sent a reboot command.
-            Boolean bScheduleTimeReached = aProperties.ScheduleReboot & (dTimeNow >= aProperties.RebootTime && dTimeNow <= dEndTime) & (MinutesSinceLastReboot(aProperties) > 15);
+            Boolean bScheduleTimeReached = aProperties.ScheduleReboot && (dTimeNow >= aProperties.RebootTime && dTimeNow <= dEndTime) && (MinutesSinceLastReboot(aProperties) > 15);
 
             // Check if we have reached the maximum up time.
-            Boolean bMaxupTimeReached = aProperties.MaxUpTimeReboot & (aProperties.CurrentModem.UpTimeHours >= aProperties.MaxUpTime);
+            Boolean bMaxupTimeReached = aProperties.MaxUpTimeReboot && (aProperties.CurrentModem.UpTimeHours >= aProperties.MaxUpTime);
 
             if (aProperties.MaxUpTimeReboot)
             {
-                bPerformReboot = bMaxupTimeReached & bScheduleTimeReached;
+                bPerformReboot = bMaxupTimeReached && bScheduleTimeReached;
                 if (bPerformReboot)
                 {
                     aProperties.LogMessage(aProperties, "Schedule reboot time and maximum uptime reached.");
