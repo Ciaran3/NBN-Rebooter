@@ -56,13 +56,13 @@ namespace NBNRebooter
             // Allow some time for the reboot to occur, then check the statistics.
             Boolean bJustRebooted = (iMinutesSinceLastReboot > 4) && (iMinutesSinceLastReboot < 10);
 
-            if ((bJustRebooted) | (aProperties.InitialStatCheck | oStatDiff.Minutes > aProperties.UpdateInterval))
+            if ((bJustRebooted) || (aProperties.InitialStatCheck || oStatDiff.Minutes > aProperties.UpdateInterval))
             {
                 aProperties.CurrentModem.LogSyncRates(aProperties);
                 aProperties.InitialStatCheck = false;
             }
 
-            if (aProperties.ScheduleReboot | aProperties.MaxUpTimeReboot)
+            if (aProperties.ScheduleReboot || aProperties.MaxUpTimeReboot)
             {
                 CheckForRebootRequired(aProperties);
             }

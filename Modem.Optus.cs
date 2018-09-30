@@ -9,17 +9,17 @@ namespace NBNRebooter
             return "F@ST 3864AC";
         }
 
-        public override string GetStatisticsUrl()
+        protected override string GetStatisticsUrl()
         {
             return "http://{0}/info.html";
         }
 
-        public override string GetRebootUrl()
+        protected override string GetRebootUrl()
         {
             return "http://{0}/mngdevicestatus.cmd?action=reboot";
         }
 
-        public override Boolean GetSyncRates(AppProperties aProperties)
+        protected override Boolean GetSyncRates(AppProperties aProperties)
         {
             string sPage = GetPageHtml(aProperties, string.Format(GetStatisticsUrl(), aProperties.ModemIP));
             Uprate = "";

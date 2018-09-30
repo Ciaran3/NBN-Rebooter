@@ -6,17 +6,15 @@ namespace NBNRebooter
     public abstract class Modem
     {
         public abstract string GetModemName();
-
-        public abstract string GetStatisticsUrl();
-
-        public abstract string GetRebootUrl();
-
-        public string Uprate { get; set; }
-        public string Downrate { get; set; }
-        public string UpTime { get; set; }
         public int UpTimeHours { get; set; }
 
-        public abstract Boolean GetSyncRates(AppProperties aProperties);
+        protected abstract string GetStatisticsUrl();
+        protected abstract string GetRebootUrl();
+        protected string Uprate { get; set; }
+        protected string Downrate { get; set; }
+        protected string UpTime { get; set; }
+
+        protected abstract Boolean GetSyncRates(AppProperties aProperties);
 
         public void LogSyncRates(AppProperties aProperties)
         {
@@ -44,6 +42,7 @@ namespace NBNRebooter
 
         public string GetPageHtml(AppProperties aProperties, string aUrl)
         {
+            string sHtml = "";
             using (WebClient oClient = new WebClient())
             {
                 if (aProperties.UseAuth)
@@ -51,20 +50,19 @@ namespace NBNRebooter
                     oClient.UseDefaultCredentials = true;
                     oClient.Credentials = new NetworkCredential(aProperties.Username, aProperties.Password);
                 }
-
                 try
                 {
-                    return oClient.DownloadString(aUrl);
+                    sHtml = oClient.DownloadString(aUrl);
                 }
                 catch (WebException ex)
                 {
                     HandleWebException(ex, aUrl);
-                    return "";
                 }
             }
+            return sHtml;
         }
 
-        public void HandleWebException(WebException aException, string aUrl)
+        private void HandleWebException(WebException aException, string aUrl)
         {
             Console.WriteLine($"An error occurred loading the URL: {aUrl}. Error: {aException.Message}");
         }

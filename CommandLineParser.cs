@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 // All credit goes to jgauffin - http://blog.gauffin.org/2014/12/simple-command-line-parser/
 public class SimpleCommandLineParser
