@@ -30,6 +30,7 @@ namespace NBNRebooter
         {
             MaxUpTime = 0;
 
+            aProperties.HasReboot = false;
             aProperties.RebootOnStart = aParser.Arguments.ContainsKey("rebootnow");
             aProperties.ScheduleReboot = aParser.Arguments.ContainsKey("reboot");
             aProperties.MaxUpTimeReboot = aParser.Arguments.ContainsKey("maxuptime");
@@ -135,7 +136,4 @@ namespace NBNRebooter
             }
         }
     }
-
-
-
 }

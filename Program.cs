@@ -93,11 +93,10 @@ namespace NBNRebooter
             // Ensure we are within the reboot time and have not just already sent a reboot command.
             Boolean bScheduleTimeReached = aProperties.ScheduleReboot && (dTimeNow >= aProperties.RebootTime && dTimeNow <= dEndTime) && (MinutesSinceLastReboot(aProperties) > 15);
 
-            // Check if we have reached the maximum up time.
-            Boolean bMaxupTimeReached = aProperties.MaxUpTimeReboot && (aProperties.CurrentModem.UpTimeHours >= aProperties.MaxUpTime);
-
             if (aProperties.MaxUpTimeReboot)
             {
+                // Check if we have reached the maximum up time.
+                Boolean bMaxupTimeReached = aProperties.MaxUpTimeReboot && (aProperties.CurrentModem.UpTimeHours >= aProperties.MaxUpTime);
                 bPerformReboot = bMaxupTimeReached && bScheduleTimeReached;
                 if (bPerformReboot)
                 {
@@ -113,9 +112,13 @@ namespace NBNRebooter
                 }
             }
 
-            if (aProperties.RebootOnStart | bPerformReboot)
+            if (aProperties.RebootOnStart || bPerformReboot)
             {
-                aProperties.CurrentModem.PerformReboot(aProperties);
+                if (aProperties.CurrentModem.PerformReboot(aProperties))
+                {
+                    aProperties.LastReboot = DateTime.Now;
+                    aProperties.RebootOnStart = false;
+                }
             }
         }
     }

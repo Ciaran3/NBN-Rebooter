@@ -30,7 +30,7 @@ namespace NBNRebooter
             }
         }
 
-        public void PerformReboot(AppProperties aProperties)
+        public Boolean PerformReboot(AppProperties aProperties)
         {
             GetSyncRates(aProperties);
 
@@ -39,13 +39,7 @@ namespace NBNRebooter
                 $"Sending Reboot Command. Current Stats: Downstream (Kbps): {Downrate}, Upstream (Kbps): {Uprate}, Uptime: {UpTime}");
 
             string sRebootHtml = GetPageHtml(aProperties, string.Format(GetRebootUrl(), aProperties.ModemIP));
-
-            if (!string.IsNullOrEmpty(sRebootHtml))
-            {
-                aProperties.LastReboot = DateTime.Now;
-                aProperties.HasReboot = true;
-                aProperties.RebootOnStart = false;
-            }
+            return !string.IsNullOrEmpty(sRebootHtml);
         }
 
         public string GetPageHtml(AppProperties aProperties, string aUrl)
