@@ -117,6 +117,7 @@ namespace NBNRebooter
                 if (aProperties.CurrentModem.PerformReboot(aProperties))
                 {
                     aProperties.LastReboot = DateTime.Now;
+                    aProperties.HasReboot = true;
                     aProperties.RebootOnStart = false;
                 }
             }
