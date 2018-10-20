@@ -1,4 +1,6 @@
 bin/
 .vs
 obj/
+packages/
+TestResults/
 NBNRebooter.sln.DotSettings.user

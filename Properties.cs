@@ -86,14 +86,16 @@ namespace NBNRebooter
 
             if (aProperties.ScheduleReboot)
             {
-                if (TimeSpan.TryParse(aParser.Arguments["reboot"][0], out var tsScheduleTime))
+                TimeSpan tsScheduleTime;
+
+                if (TimeSpan.TryParseExact(aParser.Arguments["reboot"][0], @"hh\:mm", CultureInfo.CurrentCulture, out tsScheduleTime))
                 {
                     aProperties.RebootTime = tsScheduleTime;
                 }
                 else
                 {
                     aProperties.ScheduleReboot = false;
-                    WriteLine($"Unable to convert {aParser.Arguments["reboot"][0]} to reboot hour.");
+                    WriteLine($"Unable to convert {aParser.Arguments["reboot"][0]} to reboot hour. Ensure it is in the format: hh:mm");
                 }
             }
 

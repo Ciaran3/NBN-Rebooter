@@ -28,7 +28,7 @@ namespace NBNRebooter
             }
         }
 
-        public Boolean PerformReboot(AppProperties aProperties)
+        public virtual Boolean PerformReboot(AppProperties aProperties)
         {
             GetSyncRates(aProperties);
 
@@ -40,7 +40,7 @@ namespace NBNRebooter
             return !string.IsNullOrEmpty(sRebootHtml);
         }
 
-        public string GetPageHtml(AppProperties aProperties, string aUrl)
+        protected string GetPageHtml(AppProperties aProperties, string aUrl)
         {
             string sHtml = "";
             using (WebClient oClient = new WebClient())
